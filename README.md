@@ -1,6 +1,5 @@
 # OO_Java_vs_Go
 
-
 ## Einleitung
 ### Aufgabenstellung 
 ### Motivation
@@ -63,5 +62,3 @@ TODO:
 ## Fazit
 TODO:
 - Welche Konzepte funktionieren in Go besonders gut / schlecht? 
-
-
