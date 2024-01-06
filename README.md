@@ -7,11 +7,11 @@
     - [Abgrenzung](#Abgrenzung)
 - [OO Konzepte](#oo-konzepte)
     - [Objekte / Klassen](#objekte--klassen)
-    - [Kapselung](#kapselung)
-    - [Abstraktion](#abstraktion)
-    - [Polymorphie](#polymorphie)
     - [Vererbung](#vererbung)
+    - [Abstraktion](#abstraktion)
     - [Interfaces](#interfaces)
+    - [Kapselung](#kapselung)
+    - [Polymorphie](#polymorphie)
 - [Fazit](#fazit)
 
 
@@ -29,21 +29,112 @@ We compare inheritance in Java (nominal subtyping, virtual methods) versus Go in
 
 3. Draw a comparison between Java and Go
 
-4. Summarize your findings in a short document (you could set up a github repo).
+4. Summarize your findings in a short document (you could set up a GitHub repo).
 
 ## Motivation
-Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essentielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen um festzustellen inwiefern die Objektorientierung in Go ähnlich der in java ist.
+Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essenzielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen um festzustellen inwiefern die Objektorientierung in Go ähnlich der in java ist.
 
 ## Abgrenzung
 
 
 # OO Konzepte 
 ## Objekte / Klassen
-Objekte und Klassen sind die Zentralen Bestandteile einer Objektorientieren Programmierung. Klassen sind die Vorlagen für Objekte und stellen Daten (Properties)  da, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten zustand mit konkreten daten und verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
+Objekte und Klassen sind die Zentralen Bestandteile einer Objektorientieren Programmierung. Klassen sind die Vorlagen für Objekte und stellen Daten (Properties) da, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten zustand mit konkreten daten und verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
 
 TODO: Auf operatoren eingehen
 ### Java
+In Java sollte der Konvention nach jede Klasse eine eigene Datei bekommen, welchen den Namen der Klasse trägt. Außerdem ist in Java fast alles ein Object, die Ausnahme stellen die primitiven Datentypen wie ``int`` oder ``boolean`` dar.
+
 ### Go 
+In Go gibt es keine Klassen wie in Java, allerdings gibt es Structs welche die Funktionalität von Klassen imitieren können. Entsprechend gibt es auch keine klassischen Methoden, man kann diese allerdings mithilfe von Funktionen und einem speziellen Receiver ebenfalls imitieren.
+
+```go
+type Vehicle struct {
+	topSpeed          float32
+	weight            float32
+	manufacturingDate time.Time
+}
+
+// Move is an abstract method in Go
+func (v *Vehicle) move() {
+	fmt.Println("Moving...")
+}
+```
+
+<p align="right">(<a href="#inhalt">back to top</a>)</p>
+
+## Vererbung
+Vererbung beschreibt ein wichtiges konzept der Objektorientierung bei dem ein Typ die Eigenschaften und Verhalten von einem anderen Typen erbt.
+Dies ermöglicht eine effiziente und strukturierte Art, Code zu organisieren, zu erweitern und wiederzuverwenden. Dadurch wird die Entwicklung erleichtert und die Wartbarkeit verbessert.
+
+TODO:
+- Java (nominal)
+- Go (structual)
+### Java
+### Go
+Go nutzt strukturelles Typing. Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturelles Typing in [Interfaces](#interfaces)
+
+```go
+type Car struct {
+Vehicle        // Embedding Vehicle to extend its fields and methods
+doorCount      int
+passengerCount int
+fuelLevel      float32
+}
+```
+
+Mit Komposition sieht eine Objekterstellung folgendermaßen aus:
+
+````go
+var car = Car{
+		Vehicle: Vehicle{
+			topSpeed:          160,
+			weight:            2000,
+			manufacturingDate: time.Now(),
+		},
+		doorCount:      4,
+		passengerCount: 4,
+		fuelLevel:      0,
+	}
+````
+
+<p align="right">(<a href="#inhalt">back to top</a>)</p>
+
+
+## Abstraktion 
+Wenn in der Objektorientierung über Abstraktion gesprochen wird, wird dies oft anhand von abstrakten Typen oder abstrakten Methoden erläutert. Abstraktion beschreibt dabei die Idee, komplexes Verhalten zu vereinfachen, beziehungsweise Details der Implementierung zu vernachlässigen. Abstraktion in der OO ist oftmals auch ein Werkzeug um Sourcecode zu designen und zu Strukturieren.
+
+### Java
+Abstraktion besitzt in Java eine sehr offensichtliche Ausprägung. Mit dem Schlüsselwort `abstract` können Typen aber auch Methoden gekennzeichnet werden. Ist ein Typ als `abstract` makiert, können keine Instanzen von diesem erstellt werden, es handelt sich also um einen strukturgebenden Typen.
+
+Methoden können ebenfalls mit `abstract` markiert werden. Dies ist allerdings nur möglich, wenn sich die Methode innerhalb eines abstrakten Typen befindet. Eine abstrakte Methode besitzt keine Implementierung und dient wie ein abstrakter Typ lediglich als strukturierendes Element.
+
+Im folgenden Beispiel ist die abstrakte Klasse [Vehicle](java/src/Vehicle.java) zu sehen. Die Klasse wurde als abstrakt markiert, da das Konzept eines generischen Fahrzeuges zwar Sinn ergibt, ein konkretes Fahrzeug im realen Leben allerdings eine speziefischere Ausprägung (bspw. [Auto](java/src/Car.java), [Zug](java/src/Train.java), [Fahrrad](java/src/Bike.java)) besitz.
+
+```java
+public abstract class Vehicle {
+
+    protected float topSpeed;
+    protected float weight;
+    protected Date manufacturingDate;
+
+    abstract void move();
+}
+```
+Ebenfalls fällt die `move()`-Methode auf, welche als abstrakte Methode keine Implementierung innerhalb von Vehicle besitzt. Mit diesen abstrakten Elementen wird hier Verhalten ausgedrückt, welches zu konkretisieren ist. Ein `Vehicle` kann sich bewegen (`move()`), wie dies allerdings genau aussieht ist nicht definiert.
+
+> Diese art von Abstraktion hängt stark mit dem Konzept der Vererbung zusammen, dazu mehr im Abschnitt [Vererbung](#vererbung).
+### Go
+Go bietet keine expliziten Schlüsselwörter wie ``abstract`` an um Abstraction zu ermöglichen.
+
+<p align="right">(<a href="#inhalt">back to top</a>)</p>
+
+
+
+## Interfaces
+### Java
+### Go
+
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
@@ -67,43 +158,18 @@ Zusätzlich existiert in Java das Konzept von Gettern und Settern, welche den Zu
 Der Einsatz von Getter- und Setter-Methoden bietet außerdem mehr Kontrolle über den Zugriff auf die Variablen einer Klasse, da Eingaben beispielsweise validiert werden können. 
 
 ### Go 
+In Go gibt es keine expliziten Zugriffsmodifikatoren, diese werden durch den Variablennamen inferiert. Ist der Variablenname großgeschrieben, so ist die Variable public. Ist der Name kleingeschrieben, so ist die Variable private. 
+Die korrekten Bezeichnungen dafür sind exported und unexported identifier.
+
+
+
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
-
-
-
-## Abstraktion 
-Wenn in der Objektorientierung über Abstraktion gesprochen wird, wird dies oft anhand von abstrakten Typen oder abstrakten Methoden erläutert. Abstraktion beschreibt dabei die Idee, komplexes Verhalten zu vereinfachen, beziehungsweise Details der Implementierung zu vernachlässigen. Abstraktion in der OO ist oftmals auch ein Werkzeug um Sourcecode zu designen und zu Strukturieren.
-
-### Java
-Abstraktion besitzt in Java eine sehr offensichtliche Ausprägung. Mit dem Schlüsselwort `abstract` können Typen aber auch Methoden gekennzeichnet werden. Ist ein Typ als `abstract` makiert, können keine Instanzen von diesem erstellt werden, es handelt sich also um einen strukturgebenden Typen.
-
-Methoden können ebenfalls mit `abstract` markiert werden. Dies ist allerdings nur möglich, wenn sich die Methode innerhalb eines abstrakten Typen befindet. Eine abstrakte Methode besitzt keine Implementierung und dient wie ein abstrakter Typ lediglich als strukturierendes Element.
-
-Im folgenden Beispiel ist die abstrakte Klasse [Vehicle](java/src/Vehicle.java) zu sehen. Die Klasse wurde als abstrakt markiert, da das Konzept eines generischen Fahrzeuges zwar Sinn ergibt, ein konkretes Fahrzeug im realen leben allerdings eine speziefischere Ausprägung (bspw. [Auto](java/src/Car.java), [Zug](java/src/Train.java), [Fahrrad](java/src/Bike.java)) besitz.
-
-```java
-public abstract class Vehicle {
-
-    protected float topSpeed;
-    protected float weight;
-    protected Date manufacturingDate;
-
-    abstract void move();
-}
-```
-Ebenfalls fällt die `move()`-Methode auf, welche als abstrakte Methode keine Implementierung innerhalb von Vehicle besitzt. Mit diesen abstrakten Elementen wird hier Verhalten ausgedrückt, welches zu konkretisieren ist. Ein `Vehicle` kann sich bewegen (`move()`), wie dies allerdings genau aussieht ist nicht definiert.
-
-> Diese art von Abstraktion hängt stark mit dem Konzept der Vererbung zusammen, dazu mehr im Abschnitt [Vererbung](#vererbung).
-### Go 
-
-<p align="right">(<a href="#inhalt">back to top</a>)</p>
-
 
 
 ## Polymorphie 
 Polymorphie - oder die Vielseitigkeit des Codes - existiert in verschiedenen Ausprägungen:
-- **Überladene Operatoren**: Beim überladen von Operatoren (bspw. +, -, * usw) fürt das Nutzen eines Operators innerhalb verschiedener Kontexte zu verschiedenem verhalten. So kann `+` im Kontext von nummerischen Typen eine Addition darstellen, während es im Kontext von Strings eine Konkatenation  darstellt.
+- **Überladene Operatoren**: Beim Überladen von Operatoren (bspw. +, -, * usw) fürt das Nutzen eines Operators innerhalb verschiedener Kontexte zu verschiedenem verhalten. So kann `+` im Kontext von nummerischen Typen eine Addition darstellen, während es im Kontext von Strings eine Konkatenation  darstellt.
 
 - **Inklusionspolymorphie**: Die Inklusionspolymorphie hängt stark mit der Vererbung zusammen. Im Kern bezieht sich diese Art der Polymorphie darauf, dass sich abgeleitete Typen wie der Basistyp verhalten können. So erfolgen Methodenaufrufe basierend auf dem tatsächlichen Typen erst zur Laufzeit. Dies wird auch _dynamisches Binden_ oder _late binding_ genannt.
 
@@ -200,26 +266,7 @@ carJam.addVehicle(new Bike()); // compile time error
 
 Zuletzt ist die Polymorphie bezüglich der Operatoren. Diese existiert teilweise in Java. Der `+`-Operator beispielsweise fungiert abhängig der Typen einmal als Operator für die Addition, allerdings auch im Kontext von Strings als Konkatenation. Ein eigen definiertes Verhalten von Operatoren existiert in Java jedoch nicht.
 
-### Go 
-
-<p align="right">(<a href="#inhalt">back to top</a>)</p>
-
-
-
-## Vererbung 
-TODO: 
-- Java (nominal)
-- Go (structual)
-### Java
-### Go 
-
-<p align="right">(<a href="#inhalt">back to top</a>)</p>
-
-
-
-## Interfaces  
-### Java
-### Go 
+### Go
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 

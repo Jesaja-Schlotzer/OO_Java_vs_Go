@@ -126,5 +126,16 @@ func main() {
 		time.Now(),
 	}
 
+	var car = Car{
+		Vehicle: Vehicle{
+			topSpeed:          160,
+			weight:            2000,
+			manufacturingDate: time.Now(),
+		},
+		doorCount:      4,
+		passengerCount: 4,
+		fuelLevel:      0,
+	}
+
 	fmt.Printf("Top Speed: %f\n", vehicle.topSpeed)
 }
