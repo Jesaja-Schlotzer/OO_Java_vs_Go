@@ -112,21 +112,93 @@ Polymorphie - oder die Vielseitigkeit des Codes - existiert in verschiedenen Aus
 - **Parametrische Polymorphie (Generics)**: Generics repräsentieren Typen, deren Definitionen Typvariablen beinhalten. Generics ermöglichen so die Definition von Klassen, Interfaces und Methoden, die mit verschiedenen Datentypen arbeiten können, wodurch Typsicherheit und Wiederverwendbarkeit des Codes erhöht werden.
 
 ### Java
-Java unterstützt viele Arten der Polymorphie. Zunächst die Funktionsüberladung, es ist möglich mehrere Methoden im gleichen Kontext mit selben Bezeichner zu deklarieren und zu nutzen, solange sich die Parameterliste unterscheidet.
+Java unterstützt viele Arten der Polymorphie. Zunächst die Funktionsüberladung, es ist möglich mehrere Methoden im gleichen Kontext mit selben Bezeichner zu deklarieren und zu nutzen, solange sich die Parameterliste unterscheidet. In diesem Fall entscheidet der Compiler automatisch, welche funktion aufzurufen ist
 
-TODO: CODE HIER
+```java
+// Bike.java
+
+void gearShiftUp() {
+    this.currentGear++;
+}
+
+void gearShiftUp(int gearCount) {
+    this.currentGear += gearCount;
+}
+
+----------------------------------
+// Aufruf:
+
+Bike b = new Bike();
+b.gearShiftUp();
+b.gearShiftUp(3);
+```
+> Beispiel aus [Bike.java](java/src/Bike.java)
 
 Ebenfalls ist es in Java möglich _late binding_ zu nutzen. Dafür ist allerdings Vererbung notwendig.
 
-TODO: CODE HIER
+```java
+// Train.java
 
-Der hier gezeigte Code zeigt _late binding_. Dabei ist erst zur Laufzeit bekannt, welche Implementierungen der Funktion aufgerufen werden. Das Verhalten des Basistypes wird von einem abgeleiteten Typ beeinflusst.
+void couple() {
+    this.wagonCount++;
+}
 
-Auch die Generik ist seit längerer Zeit in Java möglich. Folgender Code-Ausschnitt zeigt, wie ein Stau (realisiert als _Queue_) Typen als Parameter annehmen kann, sodass ein Auto-Stau oder Zug-Stau realisiert werden kann.
+----------------------------------
+// PassengerTrain.java
 
-TODO: CODE HIER
+@Override
+void couple() {
+    // Only empty trains can couple wagons
+    if(this.passengerCount == 0) {
+        super.couple();
+    }
+}
 
-Zuletzt ist die Polymorphie bezüglich der Operatoren. Diese existiert teilweise in Java. Der `+`-Operator beispielsweise fungiert abhängig der Typen einmal als Operator für die Addition, allerdings auch im Kontext von Strings als Konkatenation. Ein eigen definiertes Verhalten von Operatoren existiert in Java jedoch nicht. 
+----------------------------------
+// Aufruf
+
+Train[] trains = {new PassengerTrain(0),
+                  new FreightTrain()};
+
+trains[0].couple();
+trains[1].couple();
+
+```
+
+> Beispiel aus [Train.java](java/src/Train.java) und [PassengerTrain.java](java/src/PassengerTrain.java)
+
+Der hier gezeigte Code zeigt _late binding_. Dabei ist erst zur Laufzeit bekannt, welche Implementierungen der Funktion `couple()` aufgerufen werden. Das Verhalten des Basistypes wird von einem abgeleiteten Typ beeinflusst.
+
+Auch die Generik ist seit längerer Zeit in Java möglich. Folgender Code-Ausschnitt zeigt, wie ein Stau (realisiert als _Queue_) Typen als Parameter annehmen kann, sodass bspw. ein Auto-Stau oder Zug-Stau realisiert werden kann. Es ist auch möglich den Typen einzuschränken, sodass hier nur Staus von Typen angelegt werden können, welche von Vehicle erben.
+
+```java
+// TrafficJam.java
+
+public class TrafficJam<T extends Vehicle> {
+
+    private Queue<T> queue;
+
+
+    public void addVehicle(T vehicle) {
+        queue.add(vehicle);
+    }
+
+    public int jamLength() {
+        return queue.size();
+    }
+}
+
+----------------------------------
+// Aufruf
+TrafficJam<Car> carJam = new TrafficJam<>();
+carJam.addVehicle(new Car());
+carJam.addVehicle(new Bike()); // compile time error
+
+```
+> Beispiel aus [TrafficJam.java](java/src/TrafficJam.java)
+
+
+Zuletzt ist die Polymorphie bezüglich der Operatoren. Diese existiert teilweise in Java. Der `+`-Operator beispielsweise fungiert abhängig der Typen einmal als Operator für die Addition, allerdings auch im Kontext von Strings als Konkatenation. Ein eigen definiertes Verhalten von Operatoren existiert in Java jedoch nicht.
 
 ### Go 
 
