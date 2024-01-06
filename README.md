@@ -16,10 +16,23 @@
 
 
 # Einleitung
+In dieser Arbeit wird das Konzept der Objektorientierung untersucht und anhand von zwei Sprachen, Java und Go, angeschaut, inwiefern sich dieses Konzept in eine Sprache einbinden lässt und wie praktisch dieses Konzept in den jeweiligen Sprachen ist. Dafür werden die einzelnen Teile der Objektorientierung in beiden Sprachen angeschaut und verglichen, für diese Vergleiche findet sich in diesem Repository der entsprechende Code, welcher jedes einzelne Konzept beispielhaft darstellt. Am Ende wird dann ein Fazit gezogen, wie gut beide Sprachen das Konzept umsetzen und inwiefern es nützlich ist Objektorierierung in Go oder Java zu verwenden.
 
 ## Aufgabenstellung 
+OO in Java versus Go
+
+We compare inheritance in Java (nominal subtyping, virtual methods) versus Go interfaces and structural subtyping
+
+1. Consider several Java examples (of your own choice) that make use of nominal subtyping and virtual methods
+
+2. Re-implement these examples in Go
+
+3. Draw a comparison between Java and Go
+
+4. Summarize your findings in a short document (you could set up a github repo).
 
 ## Motivation
+Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essentielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen um festzustellen inwiefern die Objektorientierung in Go ähnlich der in java ist.
 
 ## Abgrenzung
 
