@@ -268,6 +268,44 @@ Zuletzt ist die Polymorphie bezüglich der Operatoren. Diese existiert teilweise
 
 ### Go
 
+Go unterstützt ebenfalls verschiedene formen der Polymorphie, eine klassische Vererbung welche für Inklusionspolymorphie benötigt wird nicht unterstützt. Es handelt sich in Go vielmehr um das Einbetten (Komposition), um ähnliche Effekte wie bei einer klassischen Vererbung zu erzielen.
+
+Strukturen können Eigenschaften anderer Strukturen einbetten und diese verwenden. Methoden werden statisch gebunden, basierend auf dem statischen Typen der Variablen zur Kompilierzeit. Mehr zum Thema Vererbung in Go kann unter [Vererbung](#vererbung) nachgelesen werden.
+
+
+Go unterstützt ebenfalls keine Funktionenüberladung. Es erlaubt nicht, mehrere Funktionen desselben Namens mit unterschiedlichen Parametern zu definieren. Funktionen mit demselben Namen sind nicht zulässig, selbst wenn sie unterschiedliche Parameter haben. So würde das vorher beschriebene Beispiel in go wie folgt aussehen: 
+
+```go
+func (b *Bike) gearShiftUp() {
+	b.currentGear++
+}
+
+// Funktion muss einen anderen Namen besitzen, auch wenn sich die Parameter unterscheiden
+func (b *Bike) gearShiftUpWithCount(gearCount int) {
+	b.currentGear += gearCount
+}
+```
+
+Generics werden allerings von go unterstützt und bieten damit all die vorher genannten Vorteile. 
+In Go gibt es im Gegensatz zu Java allerdings keine direkte Möglichkeit, Type Constraints für spezifische Teile einer Vererbungshierarchie festzulegen. In Java ist es beispielsweise möglich, den Typen auf solche zu beschränken, die von Vehicle erben. In Go kann jedoch nur ein Interface als Typ Constraint genutzt werden, was bedeutet, dass die Einschränkung auf Schnittstellen basiert und nicht auf einer spezifischen Vererbungsbeziehung wie in Java.
+ 
+```go
+// nutzt Any anstelle von Vehicle
+type TrafficJam[T any] struct {
+    queue []T
+}
+
+func (t *TrafficJam[T]) addVehicle(vehicle T) {
+    t.queue = append(t.queue, vehicle)
+}
+
+func (t *TrafficJam[T]) jamLength() int {
+    return len(t.queue)
+}
+```
+
+Sowohl in Go als auch in Java ist es nicht möglich, Operatoren manuell zu überladen. Dennoch ist der `+`-Operator in Go  für verschiedene Typen definiert und somit polymorph, ähnlich zu Java.
+
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
 # Fazit
