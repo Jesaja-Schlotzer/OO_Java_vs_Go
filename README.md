@@ -134,6 +134,25 @@ Go bietet keine expliziten Schlüsselwörter wie ``abstract`` an um Abstraction 
 ## Interfaces
 ### Java
 ### Go
+Interfaces spielen in Go eine sehr wichtige Rolle wenn es um Objektorientierung geht und liefern eine Methode wie man einige der Grundfunktionen emulieren kann. Ein Interface in Go ist eine Kollektion von Methodensignaturen. Da Go structural subtyping verwendet, implementiert ein Typ ein Interface immer dann, wenn es alle Methoden des Interfaces verwendet. Es muss also noch manuell angegeben werden, dass das Interface implementiert wird, wie es in Java der Fall ist. 
+```go
+type FuelDependent interface {
+	refuel(liter float32)
+}
+
+// PassengerTrain is a type in Go that extends Train
+type PassengerTrain struct {
+	Train          // Embedding Train to extend its fields and methods
+	passengerCount int
+}
+
+// Implementing refuel method for PassengerTrain (required by FuelDependent interface)
+func (pt *PassengerTrain) refuel(liter float32) {
+	// Implement refuel logic here
+}
+// 
+```
+Wie man am obigem Beispiel sieht, wird das Interface nie explizit vom Typ PassengerTrain implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
 
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
