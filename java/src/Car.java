@@ -2,7 +2,6 @@ public class Car extends Vehicle implements FuelDependent{
 
     int doorCount;
     int passengerCount;
-
     private float fuelLevel = 0;
 
 

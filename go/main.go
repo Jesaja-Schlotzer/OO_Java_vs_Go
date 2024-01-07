@@ -138,4 +138,5 @@ func main() {
 	}
 
 	fmt.Printf("Top Speed: %f\n", vehicle.topSpeed)
+	fmt.Printf("Top Speed: %f\n", car.topSpeed)
 }

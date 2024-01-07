@@ -4,7 +4,6 @@
 - [Einleitung](#einleitung)
     - [Aufgabenstellung](#aufgabenstellung)
     - [Motivation](#Motivation)
-    - [Abgrenzung](#Abgrenzung)
 - [OO Konzepte](#oo-konzepte)
     - [Objekte / Klassen](#objekte--klassen)
     - [Vererbung](#vererbung)
@@ -34,14 +33,11 @@ We compare inheritance in Java (nominal subtyping, virtual methods) versus Go in
 ## Motivation
 Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essenzielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen um festzustellen inwiefern die Objektorientierung in Go ähnlich der in java ist.
 
-## Abgrenzung
-
 
 # OO Konzepte 
 ## Objekte / Klassen
 Objekte und Klassen sind die Zentralen Bestandteile einer Objektorientieren Programmierung. Klassen sind die Vorlagen für Objekte und stellen Daten (Properties) da, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten zustand mit konkreten daten und verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
 
-TODO: Auf operatoren eingehen
 ### Java
 In Java sollte der Konvention nach jede Klasse eine eigene Datei bekommen, welchen den Namen der Klasse trägt. Außerdem ist in Java fast alles ein Object, die Ausnahme stellen die primitiven Datentypen wie ``int`` oder ``boolean`` dar.
 
@@ -64,15 +60,25 @@ func (v *Vehicle) move() {
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
 ## Vererbung
-Vererbung beschreibt ein wichtiges konzept der Objektorientierung bei dem ein Typ die Eigenschaften und Verhalten von einem anderen Typen erbt.
+Vererbung beschreibt ein wichtiges Konzept der Objektorientierung bei dem ein Typ die Eigenschaften und Verhalten von einem anderen Typen erbt.
 Dies ermöglicht eine effiziente und strukturierte Art, Code zu organisieren, zu erweitern und wiederzuverwenden. Dadurch wird die Entwicklung erleichtert und die Wartbarkeit verbessert.
 
-TODO:
-- Java (nominal)
-- Go (structual)
 ### Java
+Java nutzt nominales Subtyping, die Vererbungshierarchie muss also explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. In Go sieht das etwas anders aus.
+
+````java
+public class Car extends Vehicle implements FuelDependent {
+
+    int doorCount;
+    int passengerCount;
+    private float fuelLevel = 0;
+    
+    //...
+}
+````
+
 ### Go
-Go nutzt strukturelles Typing. Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturelles Typing in [Interfaces](#interfaces)
+Go nutzt strukturelles Typing. Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturellen Typing in [Interfaces](#interfaces).
 
 ```go
 type Car struct {
@@ -102,7 +108,7 @@ var car = Car{
 
 
 ## Abstraktion 
-Wenn in der Objektorientierung über Abstraktion gesprochen wird, wird dies oft anhand von abstrakten Typen oder abstrakten Methoden erläutert. Abstraktion beschreibt dabei die Idee, komplexes Verhalten zu vereinfachen, beziehungsweise Details der Implementierung zu vernachlässigen. Abstraktion in der OO ist oftmals auch ein Werkzeug um Sourcecode zu designen und zu Strukturieren.
+Wenn in der Objektorientierung über Abstraktion gesprochen wird, wird dies oft anhand von abstrakten Typen oder abstrakten Methoden erläutert. Abstraktion beschreibt dabei die Idee, komplexes Verhalten zu vereinfachen, beziehungsweise Details der Implementierung zu vernachlässigen. Abstraktion in der OO ist oftmals auch ein Werkzeug um Sourcecode zu designen und zu strukturieren.
 
 ### Java
 Abstraktion besitzt in Java eine sehr offensichtliche Ausprägung. Mit dem Schlüsselwort `abstract` können Typen aber auch Methoden gekennzeichnet werden. Ist ein Typ als `abstract` makiert, können keine Instanzen von diesem erstellt werden, es handelt sich also um einen strukturgebenden Typen.
@@ -125,16 +131,48 @@ Ebenfalls fällt die `move()`-Methode auf, welche als abstrakte Methode keine Im
 
 > Diese art von Abstraktion hängt stark mit dem Konzept der Vererbung zusammen, dazu mehr im Abschnitt [Vererbung](#vererbung).
 ### Go
-Go bietet keine expliziten Schlüsselwörter wie ``abstract`` an um Abstraction zu ermöglichen.
+Go bietet keine expliziten Schlüsselwörter wie ``abstract`` an um Abstraction zu ermöglichen. Um ein Verhalten ähnlich zu objektorientierten Sprachen wie Java zu erhalten werden in Go Interfaces benutzt. Diese funktionieren ähnlich wie Interfaces in Java. Im Kapitel [Interfaces](#interfaces) wird darauf näher eingegangen.
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
 
 
 ## Interfaces
+Interfaces ermöglichen es Methoden zu definieren, die eine implementierende Klasse auf jeden Fall haben muss. In unserem Code gibt es zum Beispiel das Interface ``FuelDependent`` welches von der Klasse `Car` und `Train`, aber nicht von der Klasse `Bike` implementiert wird. Klassen, die dieses Interface implementieren, benötigen Treibstoff zur Fortbewegung. 
+Eine andere Möglichkeit ein solches Verhalten zu implementieren wäre gewesen, wenn wir eine Superklasse von `Vehicle` `FuelDependentVehicle` erstellt hätten, welche dann die Funktionalität von `FuelDependent` übernimmt. Wollen wir dann aber zum Beispiel auch E-Bike-Objekte einer neuen von `Bike` erbenden `EBike` Klasse erzeugen hätten wir ein Problem. Das E-Bike benötigt ebenso wie `Car` und `Train` Treibstoff zum Fahren, weshalb wir dann entweder `EBike` nicht von `Bike` sondern von `FuelDependentVehicle` erben lassen müssten oder den Code aus `FuelDependentVehicle` in `EBike` duplizieren müssten. Beides keine optimalen Lösungen.
+Mit dem Interface `FuelDependent` haben wir dieses Problem nicht, wir können einfach alle relevanten Klassen vom Interface `FuelDependent` erben lassen.
+
+
+
 ### Java
+In Java werden Interfaces sehr ähnlich zu Klassen definiert. Auch Interfaces bekommen der Konvention nach eine eigene Datei mit dem Namen des Interfaces. Im Gegensatz zu Klassen sind alle Methoden eines Interfaces abstrakt, haben also keinen Methodenrumpf (Eine Ausnahme dazu stellen statische und default Methoden dar). Alle Variablen eines Interfaces sind implizit statisch.
+
+````java
+public interface FuelDependent {
+    void refuel(float liter);
+}
+
+````
+
+Will man, dass eine Klasse ein Interface implementiert, so muss man das explizit angeben. Auch hier sieht man das Java nominales Subtyping einsetzt.
+````java
+public class Car extends Vehicle implements FuelDependent {
+
+    //...
+
+    @Override
+    public void refuel(float liter) {
+        
+    }
+
+    //...
+}
+````
+
+
+
 ### Go
-Interfaces spielen in Go eine sehr wichtige Rolle wenn es um Objektorientierung geht und liefern eine Methode wie man einige der Grundfunktionen emulieren kann. Ein Interface in Go ist eine Kollektion von Methodensignaturen. Da Go structural subtyping verwendet, implementiert ein Typ ein Interface immer dann, wenn es alle Methoden des Interfaces verwendet. Es muss also noch manuell angegeben werden, dass das Interface implementiert wird, wie es in Java der Fall ist. 
+Interfaces spielen in Go eine sehr wichtige Rolle, wenn es um Objektorientierung geht und liefern eine Methode wie man einige der Grundfunktionen emulieren kann. Ein Interface in Go ist eine Kollektion von Methodensignaturen. Da Go structural subtyping verwendet, implementiert ein Typ ein Interface immer dann, wenn es alle Methoden des Interfaces verwendet. Es muss also nicht manuell angegeben werden, dass das Interface implementiert wird, wie es in Java der Fall ist. 
 ```go
 type FuelDependent interface {
 	refuel(liter float32)
@@ -152,7 +190,7 @@ func (pt *PassengerTrain) refuel(liter float32) {
 }
 // 
 ```
-Wie man am obigem Beispiel sieht, wird das Interface nie explizit vom Typ PassengerTrain implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
+Wie man am obigen Beispiel sieht, wird das Interface nie explizit vom Typ PassengerTrain implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine Ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
 
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
@@ -305,7 +343,7 @@ func (b *Bike) gearShiftUpWithCount(gearCount int) {
 }
 ```
 
-Generics werden allerings von go unterstützt und bieten damit all die vorher genannten Vorteile. 
+Generics werden allerdings von go unterstützt und bieten damit all die vorher genannten Vorteile. 
 In Go gibt es im Gegensatz zu Java allerdings keine direkte Möglichkeit, Type Constraints für spezifische Teile einer Vererbungshierarchie festzulegen. In Java ist es beispielsweise möglich, den Typen auf solche zu beschränken, die von Vehicle erben. In Go kann jedoch nur ein Interface als Typ Constraint genutzt werden, was bedeutet, dass die Einschränkung auf Schnittstellen basiert und nicht auf einer spezifischen Vererbungsbeziehung wie in Java.
  
 ```go
@@ -323,10 +361,13 @@ func (t *TrafficJam[T]) jamLength() int {
 }
 ```
 
-Sowohl in Go als auch in Java ist es nicht möglich, Operatoren manuell zu überladen. Dennoch ist der `+`-Operator in Go  für verschiedene Typen definiert und somit polymorph, ähnlich zu Java.
+Sowohl in Go als auch in Java ist es nicht möglich, Operatoren manuell zu überladen. Dennoch ist der `+`-Operator in Go für verschiedene Typen definiert und somit polymorph, ähnlich zu Java.
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
 # Fazit
-TODO:
-- Welche Konzepte funktionieren in Go besonders gut / schlecht? 
+
+Java und Go verfolgen jeweils andere Herangehensweisen im Bezug auf das objektorientierte Programmieren. Während Java von Anfang an auf die klassischen OOP-Konzepte setzte und viel explizit durch Schlüsselwörter wie `extends`, `abstract` etc. angegeben wird, setzt Go mit seinem structural Subtyping Ansatz eher darauf Vererbung und andere Konzepte der OOP implizit umzusetzen. Dadurch entstehen zwei sehr unterschiedliche Verwendungsweisen, welche beide jeweils ihre eigenen Vor- und Nachteile mit sich bringen. Während Java den Fokus oft auf Datenstrukturen legt, steht bei Go eher der Prozess im Mittelpunkt. Außerdem legt Java dem Programmierer mehr Regeln auf, während Go durch structural Subtyping freier und moderner wirkt.
+
+
+
