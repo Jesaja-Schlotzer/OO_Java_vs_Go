@@ -31,12 +31,12 @@ We compare inheritance in Java (nominal subtyping, virtual methods) versus Go in
 4. Summarize your findings in a short document (you could set up a GitHub repo).
 
 ## Motivation
-Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essenzielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen um festzustellen inwiefern die Objektorientierung in Go ähnlich der in java ist.
+Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essenzielles Konzept in der Programmierung ist und da Java und Go stark unterschiedliche Ansätze haben wie dieses Konzept implementiert werden kann. Entsprechend wollten wir uns etwas genauer mit diesem Thema beschäftigen, um die Ähnlichkeiten der objektorientierten Programmierung in Go und Java festzustellen.
 
 
 # OO Konzepte 
 ## Objekte / Klassen
-Objekte und Klassen sind die Zentralen Bestandteile einer Objektorientieren Programmierung. Klassen sind die Vorlagen für Objekte und stellen Daten (Properties) da, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten zustand mit konkreten daten und verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
+Objekte und Klassen sind die Zentralen Bestandteile der objektorientieren Programmierung. Klassen sind Vorlagen für Objekte und stellen Daten (Properties) dar, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten Zustand mit konkreten Daten und Verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
 
 ### Java
 In Java sollte der Konvention nach jede Klasse eine eigene Datei bekommen, welchen den Namen der Klasse trägt. Außerdem ist in Java fast alles ein Object, die Ausnahme stellen die primitiven Datentypen wie ``int`` oder ``boolean`` dar.
@@ -111,11 +111,11 @@ var car = Car{
 Wenn in der Objektorientierung über Abstraktion gesprochen wird, wird dies oft anhand von abstrakten Typen oder abstrakten Methoden erläutert. Abstraktion beschreibt dabei die Idee, komplexes Verhalten zu vereinfachen, beziehungsweise Details der Implementierung zu vernachlässigen. Abstraktion in der OO ist oftmals auch ein Werkzeug um Sourcecode zu designen und zu strukturieren.
 
 ### Java
-Abstraktion besitzt in Java eine sehr offensichtliche Ausprägung. Mit dem Schlüsselwort `abstract` können Typen aber auch Methoden gekennzeichnet werden. Ist ein Typ als `abstract` makiert, können keine Instanzen von diesem erstellt werden, es handelt sich also um einen strukturgebenden Typen.
+Abstraktion besitzt in Java eine sehr offensichtliche Ausprägung. Mit dem Schlüsselwort `abstract` können Typen aber auch Methoden gekennzeichnet werden. Ist ein Typ als `abstract` markiert, können keine Instanzen von diesem erstellt werden, es handelt sich also um einen strukturgebenden Typen.
 
 Methoden können ebenfalls mit `abstract` markiert werden. Dies ist allerdings nur möglich, wenn sich die Methode innerhalb eines abstrakten Typen befindet. Eine abstrakte Methode besitzt keine Implementierung und dient wie ein abstrakter Typ lediglich als strukturierendes Element.
 
-Im folgenden Beispiel ist die abstrakte Klasse [Vehicle](java/src/Vehicle.java) zu sehen. Die Klasse wurde als abstrakt markiert, da das Konzept eines generischen Fahrzeuges zwar Sinn ergibt, ein konkretes Fahrzeug im realen Leben allerdings eine speziefischere Ausprägung (bspw. [Auto](java/src/Car.java), [Zug](java/src/Train.java), [Fahrrad](java/src/Bike.java)) besitz.
+Im folgenden Beispiel ist die abstrakte Klasse [Vehicle](java/src/Vehicle.java) zu sehen. Die Klasse wurde als abstrakt markiert, da das Konzept eines generischen Fahrzeuges zwar Sinn ergibt, ein konkretes Fahrzeug im realen Leben allerdings eine spezifischere Ausprägung (bspw. [Auto](java/src/Car.java), [Zug](java/src/Train.java), [Fahrrad](java/src/Bike.java)) besitz.
 
 ```java
 public abstract class Vehicle {
@@ -190,7 +190,7 @@ func (pt *PassengerTrain) refuel(liter float32) {
 }
 // 
 ```
-Wie man am obigen Beispiel sieht, wird das Interface nie explizit vom Typ PassengerTrain implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine Ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
+Wie man am obigen Beispiel sieht, wird das Interface nie explizit vom Typ ``PassengerTrain`` implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine Ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
 
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
@@ -226,7 +226,7 @@ Die korrekten Bezeichnungen dafür sind exported und unexported identifier.
 
 ## Polymorphie 
 Polymorphie - oder die Vielseitigkeit des Codes - existiert in verschiedenen Ausprägungen:
-- **Überladene Operatoren**: Beim Überladen von Operatoren (bspw. +, -, * usw) fürt das Nutzen eines Operators innerhalb verschiedener Kontexte zu verschiedenem verhalten. So kann `+` im Kontext von nummerischen Typen eine Addition darstellen, während es im Kontext von Strings eine Konkatenation  darstellt.
+- **Überladene Operatoren**: Beim Überladen von Operatoren (bspw. +, -, * usw) führt das Nutzen eines Operators innerhalb verschiedener Kontexte zu verschiedenem Verhalten. So kann `+` im Kontext von nummerischen Typen eine Addition darstellen, während es im Kontext von Strings eine Konkatenation darstellt.
 
 - **Inklusionspolymorphie**: Die Inklusionspolymorphie hängt stark mit der Vererbung zusammen. Im Kern bezieht sich diese Art der Polymorphie darauf, dass sich abgeleitete Typen wie der Basistyp verhalten können. So erfolgen Methodenaufrufe basierend auf dem tatsächlichen Typen erst zur Laufzeit. Dies wird auch _dynamisches Binden_ oder _late binding_ genannt.
 
@@ -235,7 +235,7 @@ Polymorphie - oder die Vielseitigkeit des Codes - existiert in verschiedenen Aus
 - **Parametrische Polymorphie (Generics)**: Generics repräsentieren Typen, deren Definitionen Typvariablen beinhalten. Generics ermöglichen so die Definition von Klassen, Interfaces und Methoden, die mit verschiedenen Datentypen arbeiten können, wodurch Typsicherheit und Wiederverwendbarkeit des Codes erhöht werden.
 
 ### Java
-Java unterstützt viele Arten der Polymorphie. Zunächst die Funktionsüberladung, es ist möglich mehrere Methoden im gleichen Kontext mit selben Bezeichner zu deklarieren und zu nutzen, solange sich die Parameterliste unterscheidet. In diesem Fall entscheidet der Compiler automatisch, welche funktion aufzurufen ist
+Java unterstützt viele Arten der Polymorphie. Zunächst die Funktionsüberladung, es ist möglich mehrere Methoden im gleichen Kontext mit selben Bezeichner zu deklarieren und zu nutzen, solange sich die Parameterliste unterscheidet. In diesem Fall entscheidet der Compiler automatisch, welche Funktion aufzurufen ist
 
 ```java
 // Bike.java
@@ -290,7 +290,7 @@ trains[1].couple();
 
 > Beispiel aus [Train.java](java/src/Train.java) und [PassengerTrain.java](java/src/PassengerTrain.java)
 
-Der hier gezeigte Code zeigt _late binding_. Dabei ist erst zur Laufzeit bekannt, welche Implementierungen der Funktion `couple()` aufgerufen werden. Das Verhalten des Basistypes wird von einem abgeleiteten Typ beeinflusst.
+Der hier gezeigte Code zeigt _late binding_. Dabei ist erst zur Laufzeit bekannt, welche Implementierung der Funktion `couple()` aufgerufen wird. Das Verhalten des Basistypes wird von einem abgeleiteten Typ beeinflusst.
 
 Auch die Generik ist seit längerer Zeit in Java möglich. Folgender Code-Ausschnitt zeigt, wie ein Stau (realisiert als _Queue_) Typen als Parameter annehmen kann, sodass bspw. ein Auto-Stau oder Zug-Stau realisiert werden kann. Es ist auch möglich den Typen einzuschränken, sodass hier nur Staus von Typen angelegt werden können, welche von Vehicle erben.
 
@@ -325,7 +325,7 @@ Zuletzt ist die Polymorphie bezüglich der Operatoren. Diese existiert teilweise
 
 ### Go
 
-Go unterstützt ebenfalls verschiedene formen der Polymorphie, eine klassische Vererbung welche für Inklusionspolymorphie benötigt wird nicht unterstützt. Es handelt sich in Go vielmehr um das Einbetten (Komposition), um ähnliche Effekte wie bei einer klassischen Vererbung zu erzielen.
+Go unterstützt ebenfalls verschiedene Formen der Polymorphie, eine klassische Vererbung welche für Inklusionspolymorphie benötigt wird nicht unterstützt. Es handelt sich in Go vielmehr um das Einbetten (Komposition), um ähnliche Effekte wie bei einer klassischen Vererbung zu erzielen.
 
 Strukturen können Eigenschaften anderer Strukturen einbetten und diese verwenden. Methoden werden statisch gebunden, basierend auf dem statischen Typen der Variablen zur Kompilierzeit. Mehr zum Thema Vererbung in Go kann unter [Vererbung](#vererbung) nachgelesen werden.
 
@@ -343,7 +343,7 @@ func (b *Bike) gearShiftUpWithCount(gearCount int) {
 }
 ```
 
-Generics werden allerdings von go unterstützt und bieten damit all die vorher genannten Vorteile. 
+Generics werden allerdings von Go unterstützt und bieten damit all die vorher genannten Vorteile. 
 In Go gibt es im Gegensatz zu Java allerdings keine direkte Möglichkeit, Type Constraints für spezifische Teile einer Vererbungshierarchie festzulegen. In Java ist es beispielsweise möglich, den Typen auf solche zu beschränken, die von Vehicle erben. In Go kann jedoch nur ein Interface als Typ Constraint genutzt werden, was bedeutet, dass die Einschränkung auf Schnittstellen basiert und nicht auf einer spezifischen Vererbungsbeziehung wie in Java.
  
 ```go
