@@ -64,7 +64,7 @@ Vererbung beschreibt ein wichtiges Konzept der Objektorientierung bei dem ein Ty
 Dies ermöglicht eine effiziente und strukturierte Art, Code zu organisieren, zu erweitern und wiederzuverwenden. Dadurch wird die Entwicklung erleichtert und die Wartbarkeit verbessert.
 
 ### Java
-Java nutzt nominales Subtyping, die Vererbungshierarchie muss also explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. In Go sieht das etwas anders aus.
+Java nutzt nominales Subtyping, die Vererbungshierarchie muss dementsprechend explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. In Go sieht das etwas anders aus.
 
 ````java
 public class Car extends Vehicle implements FuelDependent {
@@ -74,11 +74,34 @@ public class Car extends Vehicle implements FuelDependent {
     private float fuelLevel = 0;
     
     //...
+
+  @Override
+  public void refuel(float liter) {
+
+  }
+
+  @Override
+  void move() {
+
+  }
 }
 ````
 
 ### Go
-Go nutzt strukturelles Typing. Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturellen Typing in [Interfaces](#interfaces).
+Go nutzt strukturelles Typing. Damit ist gemeint, dass ein Typ genau dann von einem Interface erbt, wenn alle Methoden des Interfaces im jeweiligen Typ implementiert sind.
+
+````go
+type FuelDependent interface {
+    refuel(liter float32)
+}
+
+// Implementing refuel method for PassengerTrain (required by FuelDependent interface)
+func (pt *PassengerTrain) refuel(liter float32) {
+    // ...
+}
+````
+
+Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturellen Typing in [Interfaces](#interfaces).
 
 ```go
 type Car struct {
