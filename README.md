@@ -64,7 +64,7 @@ Vererbung beschreibt ein wichtiges Konzept der Objektorientierung bei dem ein Ty
 Dies ermöglicht eine effiziente und strukturierte Art, Code zu organisieren, zu erweitern und wiederzuverwenden. Dadurch wird die Entwicklung erleichtert und die Wartbarkeit verbessert.
 
 ### Java
-Java nutzt nominales Subtyping, die Vererbungshierarchie muss dementsprechend explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. In Go sieht das etwas anders aus.
+Java nutzt nominales Subtyping, die Vererbungshierarchie muss dementsprechend explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. Dadurch kann ein Objekt der Klasse ``Car`` in einem Kontext verwendet werden, wo eigentlich ein `Vehicle` erwartet werden würde.
 
 ````java
 public class Car extends Vehicle implements FuelDependent {
