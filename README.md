@@ -405,6 +405,34 @@ func (t *TrafficJam[T]) jamLength() int {
 
 Sowohl in Go als auch in Java ist es nicht möglich, Operatoren manuell zu überladen. Dennoch ist der `+`-Operator in Go für verschiedene Typen definiert und somit polymorph, ähnlich zu Java.
 
+### Warum Generics?
+Natürlich kann sich die Frage gestellt werden, warum sollten Generics verwendet werden? Oftmals kann Verhalten, welches durch Generics ausgedrückt wird, ebenfalls durch das Nutzen eines Supertyps dargestellt werden.
+
+Der Code 
+
+```java
+void addVehicle(T vehicle) where T extends Vehicle
+```
+entspricht bei gegebener Typrelation T <= Vehicle folgendem Code:
+
+```java
+void addVehicle(Vehicle vehicle)
+```
+
+Hierbei existiert allerdings ein entscheidender Unterschied. Der Typ `T` ist zur Kompilierzeit bekannt (wird beim Nutzen der Methode oder der Deklaration des Objektes - welches diese Methode beinhaltet - festgelegt) und ist zur Laufzeit nicht variabel.
+
+Ein `TrafficJam<Train>` schränkt die `addVehicle(T vehicle)` Methode also so ein, sodass nur Objekte vom Typ `Train` und dessen Subtypen übergeben werden können.
+
+Daraus resultiert ein weiterer Unterschied. Die folgenden Methoden verhalten sich **nicht** gleich.
+
+```java
+void addVehicleTwo_a(T vehicle1, T vehicle2)
+void addVehicleTwo_b(Vehicle vehicle1, Vehicle vehicle2)
+```
+Im Fall `addVehicleTwo_b` können beide Parameter von einem beliebigen Suptypen von `Vehicle` sein. So kann als erstes Argument ein `Car` und als zweites Argument ein `Train` übergeben werden.
+
+Wird dagegen für `addVehicleTwo_a` der Typ `T` auf beispielsweise `Train` gesetzt, müssen die übergebenen Argumente von Typ `Train` oder dessen Suptypen sein.
+
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
 # Fazit
