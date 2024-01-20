@@ -41,7 +41,7 @@ Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essen
 Ein Punkt in dem sich Java und Go stark unterscheiden ist das Subtyping. In Java wird nominelles Subtyping verwendet, während Go strukturelles Subtyping verwendet.
 
 ### Nominelles Subtyping
-Nominelles Subtyping bedeutet dass explizit angegeben werden muss, wenn eine Klasse von einer Oberklasse oder einem Interface erbt.
+Nominelles Subtyping bedeutet, dass explizit angegeben werden muss, wenn eine Klasse von einer Oberklasse oder einem Interface erbt.
 ```java
 public class Car extends Vehicle implements FuelDependent {
 
@@ -66,7 +66,7 @@ Wie zu sehen ist, implementiert die Klasse explizit das Interface `FuelDependent
 ```java
 carJam.addVehicle(new Car());
 ```
-Der Code ist typkorrekt da `Car` <= `Vehicle`. Daher kann das Objekt `"new Car()"` der Klasse `Car` auch als Argument von addVehicle auftauchen und `Car` kann dort verwendet werden wo normalerweise ein Typ der Klasse `Vehicle` erwartet werden würde. Diese Eigenschaft ist außerdem auch tranisitiv. Also wenn `PassengerTrain` <= `Train` <= `Vehicle` dann gilt auch `PassengerTrain` <= `Vehicle` und auch `PassengerTrain` kann dann verwendet werden, wenn eigentlich ein `Vehicle` erwartet wird.
+Der Code ist typkorrekt da `Car` <= `Vehicle`. Daher kann das Objekt `"new Car()"` der Klasse `Car` auch als Argument von addVehicle auftauchen und `Car` kann dort verwendet werden wo normalerweise ein Typ der Klasse `Vehicle` erwartet werden würde. Diese Eigenschaft ist außerdem auch transitiv. Also wenn `PassengerTrain` <= `Train` <= `Vehicle` dann gilt auch `PassengerTrain` <= `Vehicle` und auch `PassengerTrain` kann dann verwendet werden, wenn eigentlich ein `Vehicle` erwartet wird.
 
 ### Strukturelles Subtyping
 Bei strukturellem Subtyping muss nicht explizit angegeben werden, ob eine Klasse von einer anderen erbt. Hier impliziert eine struct dann ein interface, wenn es alle Methoden des Interfaces implementiert. 
@@ -119,51 +119,17 @@ Vererbung beschreibt ein wichtiges Konzept der Objektorientierung bei dem ein Ty
 Dies ermöglicht eine effiziente und strukturierte Art, Code zu organisieren, zu erweitern und wiederzuverwenden. Dadurch wird die Entwicklung erleichtert und die Wartbarkeit verbessert.
 
 ### Java
-Java nutzt nominales Subtyping, die Vererbungshierarchie muss dementsprechend explizit angegeben werden. Im unteren Beispiel erbt die Klasse ``Car`` von der Klasse `Vehicle` und implementiert gleichzeitig das Interface `FuelDependent`. Es besteht also explizit eine Hierarchie zu `Vehicle` und `FuelDependent`. Nur Klassen, die von `Vehicle` erben, erben dessen Funktionalität, gleiches gilt für das Interface `FuelDependent`. Dadurch kann ein Objekt der Klasse ``Car`` in einem Kontext verwendet werden, wo eigentlich ein `Vehicle` erwartet werden würde.
-
-````java
-public class Car extends Vehicle implements FuelDependent {
-
-    int doorCount;
-    int passengerCount;
-    private float fuelLevel = 0;
-    
-    //...
-
-  @Override
-  public void refuel(float liter) {
-
-  }
-
-  @Override
-  void move() {
-
-  }
-}
-````
+Java nutzt, wie im Kapitel [Nominelles und Strukturelles Subtyping](#Nominelles-und-Strukturelles-Subtyping) erwähnt, nominales Subtyping, die Vererbungshierarchie muss dementsprechend explizit angegeben werden. 
 
 ### Go
-Go nutzt strukturelles Typing. Damit ist gemeint, dass ein Typ genau dann von einem Interface erbt, wenn alle Methoden des Interfaces im jeweiligen Typ implementiert sind.
-
-````go
-type FuelDependent interface {
-    refuel(liter float32)
-}
-
-// Implementing refuel method for PassengerTrain (required by FuelDependent interface)
-func (pt *PassengerTrain) refuel(liter float32) {
-    // ...
-}
-````
-
-Typen werden hierbei anhand ihrer Eigenschaften und nicht durch explizite Vererbungshierarchien verglichen. Durch Komposition können Strukturen in Go ähnliche Effekte wie Vererbung erzielen, indem sie Eigenschaften anderer Strukturen nutzen, solange sie diese gemeinsamen Merkmale teilen. Hierarchien sind nicht notwendig – das strukturelle Typsystem erlaubt flexibles Arbeiten mit Typen basierend auf geteilten Eigenschaften, unabhängig von einer Vererbungsbeziehung. Mehr zum strukturellen Typing in [Interfaces](#interfaces).
+Go nutzt in Gegensatz dazu strukturelles Subtyping. Außerdem gibt es keine klassische Vererbung wie in Java, aber Vererbung kann in Go durch Komposition simuliert werden. Dabei werden Eigenschaften anderer Strukturen genutzt, was flexibleres Arbeiten ermöglicht.
 
 ```go
 type Car struct {
-Vehicle        // Embedding Vehicle to extend its fields and methods
-doorCount      int
-passengerCount int
-fuelLevel      float32
+    Vehicle        // Embedding Vehicle to extend its fields and methods
+    doorCount      int
+    passengerCount int
+    fuelLevel      float32
 }
 ```
 
@@ -217,7 +183,7 @@ Go bietet keine expliziten Schlüsselwörter wie ``abstract`` an um Abstraction 
 
 ## Interfaces
 Interfaces ermöglichen es Methoden zu definieren, die eine implementierende Klasse auf jeden Fall haben muss. In unserem Code gibt es zum Beispiel das Interface ``FuelDependent`` welches von der Klasse `Car` und `Train`, aber nicht von der Klasse `Bike` implementiert wird. Klassen, die dieses Interface implementieren, benötigen Treibstoff zur Fortbewegung. 
-Eine andere Möglichkeit ein solches Verhalten zu implementieren wäre gewesen, wenn wir eine Superklasse von `Vehicle` `FuelDependentVehicle` erstellt hätten, welche dann die Funktionalität von `FuelDependent` übernimmt. Wollen wir dann aber zum Beispiel auch E-Bike-Objekte einer neuen von `Bike` erbenden `EBike` Klasse erzeugen hätten wir ein Problem. Das E-Bike benötigt ebenso wie `Car` und `Train` Treibstoff zum Fahren, weshalb wir dann entweder `EBike` nicht von `Bike` sondern von `FuelDependentVehicle` erben lassen müssten oder den Code aus `FuelDependentVehicle` in `EBike` duplizieren müssten. Beides keine optimalen Lösungen.
+Eine andere Möglichkeit ein solches Verhalten zu implementieren wäre gewesen, wenn wir eine Subklasse von `Vehicle` `FuelDependentVehicle` erstellt hätten, welche dann die Funktionalität von `FuelDependent` übernimmt. Wollen wir dann aber zum Beispiel auch E-Bike-Objekte einer neuen von `Bike` erbenden `EBike` Klasse erzeugen hätten wir ein Problem. Das E-Bike benötigt ebenso wie `Car` und `Train` Treibstoff zum Fahren, weshalb wir dann entweder `EBike` nicht von `Bike` sondern von `FuelDependentVehicle` erben lassen müssten oder den Code aus `FuelDependentVehicle` in `EBike` duplizieren müssten. Beides keine optimalen Lösungen.
 Mit dem Interface `FuelDependent` haben wir dieses Problem nicht, wir können einfach alle relevanten Klassen vom Interface `FuelDependent` erben lassen.
 
 
@@ -248,7 +214,6 @@ public class Car extends Vehicle implements FuelDependent {
 ````
 
 
-
 ### Go
 Interfaces spielen in Go eine sehr wichtige Rolle, wenn es um Objektorientierung geht und liefern eine Methode wie man einige der Grundfunktionen emulieren kann. Ein Interface in Go ist eine Kollektion von Methodensignaturen. Da Go structural subtyping verwendet, implementiert ein Typ ein Interface immer dann, wenn es alle Methoden des Interfaces verwendet. Es muss also nicht manuell angegeben werden, dass das Interface implementiert wird, wie es in Java der Fall ist. 
 ```go
@@ -268,8 +233,7 @@ func (pt *PassengerTrain) refuel(liter float32) {
 }
 // 
 ```
-Wie man am obigen Beispiel sieht, wird das Interface nie explizit vom Typ ``PassengerTrain`` implementiert. Dennoch wird, dadurch dass die Methode "refuel" implementiert wird, auch das Interface implementiert. Dies wird oft auch als "duck typing" bezeichnet: wenn es aussieht wie eine Ente und sich verhält wie eine Ente, dann wird es auch als Ente wahrgenommen. Dadurch kann man in Go flexibler mit Interfaces umgehen, als es in Sprachen mit nominellem Subtyping möglich ist. 
-
+Wie man am obigen Beispiel sieht, wird das Interface nie explizit vom Typ ``PassengerTrain`` implementiert. Dennoch wird, dadurch dass die `refuel`-Methode implementiert wird, auch das Interface implementiert.
 
 <p align="right">(<a href="#inhalt">back to top</a>)</p>
 
