@@ -4,7 +4,8 @@
 - [Einleitung](#einleitung)
     - [Aufgabenstellung](#aufgabenstellung)
     - [Motivation](#Motivation)
-- [OO Konzepte](#oo-konzepte)
+- [OO Konzepte](#oo-konzepte) 
+    - [Nominelles und Strukturelles Subtyping](#Nominelles-und-Strukturelles-Subtyping)
     - [Objekte / Klassen](#objekte--klassen)
     - [Vererbung](#vererbung)
     - [Abstraktion](#abstraktion)
@@ -35,6 +36,60 @@ Wir haben uns für dieses Thema entschieden, da die Objektorientierung ein essen
 
 
 # OO Konzepte 
+
+## Nominelles und Strukturelles Subtyping
+Ein Punkt in dem sich Java und Go stark unterscheiden ist das Subtyping. In Java wird nominelles Subtyping verwendet, während Go strukturelles Subtyping verwendet.
+
+### Nominelles Subtyping
+Nominelles Subtyping bedeutet dass explizit angegeben werden muss, wenn eine Klasse von einer Oberklasse oder einem Interface erbt.
+```java
+public class Car extends Vehicle implements FuelDependent {
+
+    int doorCount;
+    int passengerCount;
+    private float fuelLevel = 0;
+    
+    //...
+
+  @Override
+  public void refuel(float liter) {
+
+  }
+
+  @Override
+  void move() {
+
+  }
+}
+```
+Wie zu sehen ist, implementiert die Klasse explizit das Interface `FuelDependent` und erweitert die Oberklasse `Vehicle`. Dadurch kann zum Beispiel folgender Code ausgeführt werden:
+```java
+carJam.addVehicle(new Car());
+```
+Der Code ist typkorrekt da `Car` <= `Vehicle`. Daher kann das Objekt `"new Car()"` der Klasse `Car` auch als Argument von addVehicle auftauchen und `Car` kann dort verwendet werden wo normalerweise ein Typ der Klasse `Vehicle` erwartet werden würde. Diese Eigenschaft ist außerdem auch tranisitiv. Also wenn `PassengerTrain` <= `Train` <= `Vehicle` dann gilt auch `PassengerTrain` <= `Vehicle` und auch `PassengerTrain` kann dann verwendet werden, wenn eigentlich ein `Vehicle` erwartet wird.
+
+### Strukturelles Subtyping
+Bei strukturellem Subtyping muss nicht explizit angegeben werden, ob eine Klasse von einer anderen erbt. Hier impliziert eine struct dann ein interface, wenn es alle Methoden des Interfaces implementiert. 
+```go
+type Car struct {
+    Vehicle        // Embedding Vehicle to extend its fields and methods
+    doorCount      int
+    passengerCount int
+    fuelLevel      float32
+}
+
+//...
+
+// Override move method for Car
+func (c *Car) move() {
+    fmt.Println("Car is moving...")
+}
+```
+In diesem Beispiel implementiert `PassengerTrain` das Interface `FuelDependent`, es gilt also `Car` <= `Vehicle`, auch wenn dies nirgends explizit angegeben wurde. Entsprechend könnte in Go ebenfalls eine `Car` dort verwendet werden, wo eigentlich ein `Vehicle` erwartet wird.
+
+### Generelles
+Generell ist weder strukturelles noch nominales Subtyping besser als das andere. Während das eine strikter ist, lässt das andere mehr Spielraum zu. So kann man in Go das sogenannte Duck Typing anwendet. Wenn es aussieht wie eine Ente und sich verhält wie eine Ente, ist es auch eine Ente. 
+
 ## Objekte / Klassen
 Objekte und Klassen sind die Zentralen Bestandteile der objektorientieren Programmierung. Klassen sind Vorlagen für Objekte und stellen Daten (Properties) dar, an welche ein Verhalten (Methoden) gebunden wird. Ein Objekt hingegen repräsentiert einen konkreten Zustand mit konkreten Daten und Verhalten. Im Gegensatz zur funktionalen Programmierung ist das Konzept in objektorientierter Programmierung, dass es immer und überall einen State gibt.
 
