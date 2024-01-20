@@ -3,9 +3,9 @@
 # Inhalt
 - [Einleitung](#einleitung)
     - [Aufgabenstellung](#aufgabenstellung)
-    - [Motivation](#Motivation)
+    - [Motivation](#motivation)
 - [OO Konzepte](#oo-konzepte) 
-    - [Nominelles und Strukturelles Subtyping](#Nominelles-und-Strukturelles-Subtyping)
+    - [Nominelles und Strukturelles Subtyping](#nominelles-und-strukturelles-subtyping)
     - [Objekte / Klassen](#objekte--klassen)
     - [Vererbung](#vererbung)
     - [Abstraktion](#abstraktion)
